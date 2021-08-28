@@ -7,18 +7,18 @@ namespace KPIQuestBOT
 {
     class Program
     {
-        private static string token = "1956989663:AAEIVfY41UuaVz452u_jgs071TqR3DwNqe0";
+        public static string token = new InitComponents().Token;
         private static TelegramBotClient botClient;
-        public static string teamCode;
-        public static long teamCodeNum;
-        public static bool turn = false;
-        public static bool logined = false;
-        public static bool isWaitingAswear = false;
-        public static int questionNum = -1;
-        public static int answearNum = 0;
-        static public DataBaseWork work = new DataBaseWork();
-        static public List<QuestionAnswear> QA = new List<QuestionAnswear>();
-        static public List<string> stickerList = new List<string>();
+        private static string teamCode;
+        private static long teamCodeNum;
+        private static bool turn = false;
+        private static bool logined = false;
+        private static bool isWaitingAswear = false;
+        private static int questionNum = -1;
+        private static int answearNum = 0;
+        private static DataBaseWork work = new DataBaseWork();
+        static private List<QuestionAnswear> QA = new List<QuestionAnswear>();
+        static private List<string> stickerList = new List<string>();
 
         [Obsolete]
         static void Main(string[] args)
@@ -64,7 +64,7 @@ namespace KPIQuestBOT
                
                 if (logined && !isWaitingAswear && questionNum < QA.Count) 
                 {
-                    await botClient.SendTextMessageAsync(chatId, QA[questionNum].Question);
+                    await botClient.SendTextMessageAsync(chatId, $"Problem {questionNum+1} \n\n\n     {QA[questionNum].Question}");
                     isWaitingAswear = true;
                     questionNum++;
                 }
@@ -74,7 +74,7 @@ namespace KPIQuestBOT
                     {
                         await botClient.SendTextMessageAsync(chatId, "Answear is right . . .");
                         answearNum++;
-                        await botClient.SendTextMessageAsync(chatId, QA[questionNum].Question);
+                        await botClient.SendTextMessageAsync(chatId, $"Problem {questionNum + 1} \n\n\n     {QA[questionNum].Question}");
                         questionNum++; 
                     }
                 }
