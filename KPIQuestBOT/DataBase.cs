@@ -8,7 +8,8 @@ namespace KPIQuestBOT
 {
     class DataBase
     {
-        MySqlConnection connection = new MySqlConnection("datasource=127.0.0.1;port=3306;username=root;password=;database=userlog;SSL Mode = 0;");
+
+        MySqlConnection connection = new MySqlConnection(new InitComponents().DBinfo);
 
         public void OpenConnection()
         { 

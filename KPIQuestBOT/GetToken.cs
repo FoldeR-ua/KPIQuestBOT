@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace KPIQuestBOT
 {
-    class GetToken
+    class BotToken
     {
         private string token;
 
