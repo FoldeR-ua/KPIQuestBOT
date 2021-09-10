@@ -26,10 +26,10 @@ namespace KPIQuestBOT
                 start = true;
             }
         }
-        public static bool CheckingAccoount(long chatId, ref bool logined, string message)
+        public static bool CheckingAccount(long userId, long chatId, ref bool logined, string message)
         {
             teamCode = message;
-            work.CheckingData(teamCode, ref logined);
+            work.CheckingData(teamCode, ref logined, userId);
             isWaitingAswear = false;
             if (logined)
             {
@@ -67,6 +67,7 @@ namespace KPIQuestBOT
             botClient.SendTextMessageAsync(chatId, "Quest is over . . . ");
             botClient.SendStickerAsync(chatId, "https://cdn.tlgrm.app/stickers/696/3ad/6963ad3a-2019-32d2-ac85-34af3c84e50b/256/11.webp");
             over = true;
+            botClient.CloseAsync();
         }
     }
    

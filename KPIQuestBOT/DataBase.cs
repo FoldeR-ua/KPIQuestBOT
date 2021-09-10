@@ -9,7 +9,7 @@ namespace KPIQuestBOT
     class DataBase
     {
 
-        MySqlConnection connection = new MySqlConnection(new InitComponents().DBinfo);
+        MySqlConnection connection = new MySqlConnection(new InitComponents("json").DBinfo);
 
         public void OpenConnection()
         { 
@@ -20,24 +20,47 @@ namespace KPIQuestBOT
     }
     class DataBaseWork
     {
-        public void CheckingData(string password, ref bool logined)
+        public void CheckingData(string password, ref bool logined, long userId)
         {
+            long id = -1;
             DataBase data = new DataBase();
+            password = new HashMethod(password).GetHash;
+
             data.OpenConnection();
             
             MySqlCommand command = new MySqlCommand("SELECT * FROM `quest` WHERE `password` = @pass", data.GetConnection());
             command.Parameters.Add("@pass", MySqlDbType.VarChar).Value = password;
+
+            MySqlDataReader reader = command.ExecuteReader();
+
+            while (reader.Read())
+            {
+                id = reader.GetInt64("user");
+            }
+            reader.Close();
+
             
-            DataTable table = new DataTable();
-            MySqlDataAdapter adapter = new MySqlDataAdapter();
+            if(id == 0)
+            {
+                logined = true;
+                MySqlCommand command2 = new MySqlCommand("UPDATE `quest` SET `inuse`= 1, `user`= @us WHERE `password`=@hpass", data.GetConnection());
+                command2.Parameters.Add("@us", MySqlDbType.VarChar).Value = userId;
+                command2.Parameters.Add("@hpass", MySqlDbType.VarChar).Value = password;
+                command2.ExecuteNonQuery();
+            }
             
-            adapter.SelectCommand = command;
-            adapter.Fill(table);
-            data.CloseConnection();
-            if (table.Rows.Count == 1) logined = true; else logined = false;
+            if (id == userId)
+            {
+                logined = true; 
+            }
+            else logined = false;
+
+
+            data.CloseConnection();   
         }
         public void ReadJSON(string password, ref List<QuestionAnswear> questionAnswears)
         {
+            password = new HashMethod(password).GetHash;
             string json = "";
             DataBase data = new DataBase();
             data.OpenConnection();

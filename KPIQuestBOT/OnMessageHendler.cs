@@ -10,7 +10,7 @@ namespace KPIQuestBOT
 {
     partial class Dialog
     {
-        public static string token = new InitComponents().Token;
+        public static string token = new InitComponents("json").Token;
         private static TelegramBotClient botClient;
         private static string teamCode;
         private static long teamCodeNum;
@@ -36,7 +36,7 @@ namespace KPIQuestBOT
                LoginedClient(e.Message.Text, chatId);
 
                 if (e.Message.Text.Length == 8 && long.TryParse(e.Message.Text, out teamCodeNum) && start)
-                    CheckingAccoount(chatId, ref logined, e.Message.Text);
+                    CheckingAccount(e.Message.From.Id,chatId, ref logined, e.Message.Text);
 
 
                 if (logined && !isWaitingAswear && questionNum == -1)
